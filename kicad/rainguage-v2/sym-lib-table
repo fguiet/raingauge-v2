@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "raingauge-v2-1")(type "Legacy")(uri "/mnt/nfs/fred/projets/sensors/raingauge-v2/kicad/third-party-library/Libraries/ht7333-a.lib")(options "")(descr ""))
+  (lib (name "raingauge-v2-2")(type "Legacy")(uri "/mnt/nfs/fred/projets/sensors/raingauge-v2/kicad/third-party-library/Libraries/SparkFun-RF.lib")(options "")(descr ""))
+)
