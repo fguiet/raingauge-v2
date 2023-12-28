@@ -122,12 +122,24 @@ Don't forget to set Xbee serial speed communication to 38400 bauds as the ATtiny
 
 ## Librairies used in this project
 
+* ATTinySerialOut
+
 To communicate with the XBee (send data), this project used the following library : `ATtinySerialOut`, version 2.2.0 (2023/12)
 
 GitHub : <https://github.com/ArminJo/ATtinySerialOut/>
 
 ![](images/attinyserialout-lib.png)
 
+
+* LowPower
+
+This project is using this library <https://github.com/ortegafernando/Low-Power> to allow the ATTiny 85 power management
+
+__Note__
+
+To use an external library for a Arduino IDE Project, just copy the library source in the librairies folder of Arduino IDE
+
+![](images/arduino-ide-library.png)
 
 ## Freecad
 
@@ -149,13 +161,20 @@ Quick reminder about pullup/pulldown : <https://arduino.developpez.com/cahiers-p
 
 ## Kicad
 
-Ce tuto : <https://www.youtube.com/watch?v=RpVIrzEUsIM&t=1837s> ou celui là <https://www.youtube.com/watch?v=dAck3bxzehA&t=1681s>
+Ce tuto : <https://www.youtube.com/watch?v=RpVIrzEUsIM> ou <https://www.youtube.com/watch?v=dAck3bxzehA> ou <https://www.youtube.com/watch?v=nYybg5KdaT8>
+
+__Note__ :
+
+Suppression du snap sur le PCB Editor afin de placer les composants à un endroits précis : utiliser la touche CTRL
+
 
 __Grandes étapes__
 
-1. Remplir le cartouche
+1. Editeur de schéma électronique, remplir le cartouche pour définir les informations du PCB
 
 Fichier, Ajustage page
+
+![Alt text](images/kicad-ajuster-page.png)
 
 2. Place all your components
 
@@ -165,32 +184,113 @@ M : Move
 R : Rotate
 Tab  : Pour bouger le composant avec les fils accrochés
 
+Pour vérifier que le circuit est ok on peut cliquer sur le bouton : 
+
+![Alt text](images/kicad-check.png)
+
+__Note__
+
+* Essayer de mettre par convention VCC en haut et GND en bas au niveau du positionnement
+* Il existe des labels global et local (A voir sur le net la différence)
+* Possibilité de créer des feuilles hiérarchiques (si jamais on a un schéma très grand alors on peut le splitter, après y'a les notions de labels hiérarchiques, global, etc etc...)
+* Il faut bien penser à définir les pins qui alimentent le schéma électrique (= PWR_FLAG)
+
 3. Annotation de la schématique (pour numéroter les composants)
+
+Normalement avec Kicad 7, les éléments sont numérotés automatiquement.
+Sinon, cliquer sur le bouton: 
+
+![Alt text](images/kicad-init-component-ref.png)
 
 4. Assigner les empreintes des composants de la schématique
 
+![Alt text](images/kicad-affectation-empreinte.png)
+
 5. Génération de la net liste
+
+Inutile dans Kicad 7 ?
 
 6. Editeur de circuit imprimé et lecture de la net liste
 
-7. Placement des composants
+Inutile dans Kicad 7 ?
+
+7. Placement des composants sur l'éditeur de PBB
+
+On passe sur cet écran en cliquant sur :
+
+![Alt text](images/kicad-pcb-editor.png)
+
+Récupération des contraintes JLCPCB : <https://github.com/sethhillbrand/kicad_templates/tree/master/JLCPCB_1-2Layer> prendre le fichier JLCPCB.pro
+
+![Alt text](images/kicad-import-jlcpcb-settings.png)
+
+![Alt text](images/kicad-import-jlcpcb-settings-2.png)
+
+Fichier, Ajustage page pour personnaliser le cartouche comme pour l'éditeur de schéma électronique
+
+Pour gérer la largeur des pistes en fonction du type de piste (VCC) : Fichiers, Options CI, Classe d'Equipots, j'utilise 0.4mm pour les pistes classiques et 0.8mm en VCC
+
+![Alt text](images/kicad-edit-netclasses.png)
+
+Penser à modifier la valeur par défault de la largeur des pistes à 0.4mm
+
+Short Cut
+
+v: change layer (front / bottom)
+
+
+__Notes__
+
+Layers intéressantes 
+
+F. Silks pour écrire sur le front Silk Screen
+B. Silks pour écrire sur le bottom Silk Screen
+Dwgs.User pour faire des dessins
+F. Courtyard : place que prend le composant front
+B. Courtyard : place que prend le composant bottom (on peut afficher ou pas)
 
 8. Couche Edge cut (contour de carte)
 
+On trace autour des composants pour couper le PCB à la taille désirée
+
 9. Routage
+
+Pour la largeur, bien penser à sélectionner utiliser largeur de netclasse.
+Attention, dans netclasse il faut avoir penser à modifier la valeur par défaut pour la largeur des pistes à 0.4mm et mettre 0.8mm pour les pistes de puissance (PWR)
+
+![Alt text](images/kicad-routage-largeur-piste.png)
+
+Voici ce qu'il faut respecter lors que l'on trace des routages pour éviter les pbs d'électromagnétisme.
+
+![Alt text](images/kicad-tracks-do-donts.png)
+
+
+Quand on a des tracks qui se croisent sur la couche du dessus et dessous il faut qu'elles soient perpendiculaires:
+
+![Alt text](images/kicad-tracks-do-donts-2.png)
 
 Couche F. Cu (Front en rouge couche du dessus)
 Couche B. Cu (Front en vert couche du dessous)
 
-Fichiers, Options CI, Classe d'Equipots, j'utilise 0.762 comme largeur de piste
-
 Ne pas relier les GND, ca sera automatique avec le plan de masse
 
-10 . Serigrafie avec couche Drawing User pour mettre les indications + - et autres
+__Notes__
 
-11 . Générer les fichiers Gerber, Fichier Tracer (ne pas oublier de générer le fichier de percage)
+Short cut
 
-12 . Faire un Zip et envoyer sur JLCPCB par exemple
+D : Pour modifer les tracks sans tous casser
+
+10. Ajouter la zone ground (sur layer front / bottom)
+
+Utiliser l'outil : 
+
+![Alt text](images/kicad-add-zone-gnd.png)
+
+10. Serigrafie avec couche Drawing User pour mettre les indications + - et autres
+
+11. Générer les fichiers Gerber, Fichier Tracer (ne pas oublier de générer le fichier de percage)
+
+12. Faire un Zip et envoyer sur JLCPCB par exemple
 
 ## References
 
