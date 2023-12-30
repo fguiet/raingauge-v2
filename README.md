@@ -58,6 +58,16 @@ Then, power the circuit by an external alimentation at 3.3v (no need to power th
 
 ![](images/usbtoserialadapter.png)
 
+## Power consumption
+
+Using the PPK II (Nordic Power Profiler Kit II), the device consume about 10uA when sleeping and 55mA when sending data.
+
+![](images/power-consumption.png)
+
+VOUT of the PPK II should be connected to VIN of the device and GND to GND.
+
+See [Get your Power Profiler Kit II up and running](https://www.youtube.com/watch?v=B42lPvkUSoc)
+
 ## Configuring XBee S1 with XCTU v6.5.13
 
 I am using old XBee S1
@@ -161,12 +171,15 @@ Quick reminder about pullup/pulldown : <https://arduino.developpez.com/cahiers-p
 
 ## Kicad
 
+![Alt text](images/kicad-electronic-pcb.png)
+
+![Alt text](images/kicad-electronic-schema.png)
+
 Ce tuto : <https://www.youtube.com/watch?v=RpVIrzEUsIM> ou <https://www.youtube.com/watch?v=dAck3bxzehA> ou <https://www.youtube.com/watch?v=nYybg5KdaT8>
 
 __Note__ :
 
 Suppression du snap sur le PCB Editor afin de placer les composants à un endroits précis : utiliser la touche CTRL
-
 
 __Grandes étapes__
 
@@ -249,6 +262,12 @@ Dwgs.User pour faire des dessins
 F. Courtyard : place que prend le composant front
 B. Courtyard : place que prend le composant bottom (on peut afficher ou pas)
 
+Quand il y a beaucoup d'éléments sur le PCB, on peut utiliser le filtre de sélection afin de limiter la sélection à l'objet que l'on désire (exemple j'avais besoin de bouger les références des composants sur la layer silkscreen)
+
+![Alt text](images/kicad-select-filter-dans-bordel.png)
+
+![Alt text](images/kicad-select-filter.png)
+
 8. Couche Edge cut (contour de carte)
 
 On trace autour des composants pour couper le PCB à la taille désirée
@@ -279,6 +298,7 @@ __Notes__
 Short cut
 
 D : Pour modifer les tracks sans tous casser
+I : Au dessus d'une track permet de sélectionner toute la track
 
 10. Ajouter la zone ground (sur layer front / bottom)
 
@@ -286,13 +306,19 @@ Utiliser l'outil :
 
 ![Alt text](images/kicad-add-zone-gnd.png)
 
-10. Serigrafie avec couche Drawing User pour mettre les indications + - et autres
+10. Serigrafie avec couche Drawing User pour mettre les indications + - et autres ou layer F. Silks et B. Silks
 
 11. Générer les fichiers Gerber, Fichier Tracer (ne pas oublier de générer le fichier de percage)
+
+Mettre un texte JLCJLCJLCJLC sous un composant (layersilk screen)
+
+D'abord générer le fichier de percage (generate drill file) et ensuite plot avec les options par défaut.
 
 12. Faire un Zip et envoyer sur JLCPCB par exemple
 
 ## References
+
+* snapeda pour récupérer des composants kicad : <https://www.snapeda.com/>
 
 * Madman's Github : <https://github.com/PricelessToolkit/MailBoxGuard>
 
@@ -310,8 +336,7 @@ Utiliser l'outil :
 
 * [Communication XBee](https://www.redohm.fr/2015/03/communication-xbee/)
 
-* [Configuration XBee](https://www.electro-info.ovh/
-configuration-d-un-module-XBEE-avec-XCTU)
+* [Configuration XBee](https://www.electro-info.ovh/configuration-d-un-module-XBEE-avec-XCTU)
 
 * [Un programme qui ressemble a ce que je fais](https://github.com/cano64/ATTiny85-ATTiny84-BMP085-Arduino-Library-FastAltitude/issues/1)
 
