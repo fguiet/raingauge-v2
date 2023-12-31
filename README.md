@@ -1,5 +1,9 @@
 # Raingauge v2
 
+## 3D representation
+
+![](images/freecad-raingauge-3d.png)
+
 ## Programming the ATtiny85
 
 Here is the ATtiny 85 pinout
