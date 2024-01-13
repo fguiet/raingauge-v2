@@ -4,6 +4,19 @@
 
 ![](images/freecad-raingauge-3d.png)
 
+## Compute how much water has fell ?
+
+Funnel diameter = 15cm = 150 mm = 0.15m
+Volume of each bucket (around) = 2.5ml = 0.0025l
+
+Funnel area = pi*R² = 3.14 * 0.075² = 0,017669025 m2
+
+X= 1/Aire * V = (1/0,017669025) * 0.0025 = 0.141490543 L par m2 (ou mm)
+
+1mm = Une litre d'eau tombé sur une mètre carré
+
+Résolution de mon pluvio = 0.15 L/m2 (c'est dans la norme)
+
 ## Programming the ATtiny85
 
 Here is the ATtiny 85 pinout
