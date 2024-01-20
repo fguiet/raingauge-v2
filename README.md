@@ -147,6 +147,33 @@ PIN 9 DOWN : Xbee awake
 
 Don't forget to set Xbee serial speed communication to 38400 bauds as the ATtinySerialOut library use this speed.
 
+### Using the API Mode
+
+I was using Transparent Mode before (AT) but there is another mode called API Mode that offers more options and controls
+
+See [API mode in detail](https://www.digi.com/resources/documentation/Digidocs/90001942-13/concepts/c_api_mode_detailed.htm?TocPath=XBee%20API%20mode%7C_____1)
+
+See [API Mode 2 frame Structure](https://www.digi.com/resources/documentation/Digidocs/90001942-13/concepts/c_api_frame_structure.htm?tocpath=XBee%20API%20mode%7C_____2)C
+
+Supported frames are listed here : <https://www.digi.com/resources/documentation/Digidocs/90001942-13/reference/r_supported_frames_zigbee.htm?tocpath=API%20mode%7C_____3>
+
+I am using the 64-bit Transmit Request - 0x00 frame. I know that I should use the 0x10 frame tpye but I am using old XBee S1 and they only support 802.15.4 protocol stack.
+
+See [64-bit Transmit Request - 0x00](https://www.digi.com/resources/documentation/Digidocs/90001477/reference/r_frame_0x00.htm?tocpath=API%20frames%7C_____3)
+
+In API Mode 2, some characters need to be escaped:
+
+See : <https://stackoverflow.com/questions/55861574/difference-between-api-1-and-api-2-mode-of-xbee>
+
+* 0x7E (Start of frame) => 0x7D 0x5E (escaped)
+* 0x7D (start of escape sequence) => 0x7D 0x5D (escaped)
+* 0x13 (XOFF) => 0x7D 0x33 (escaped)
+* 0x11 (XON) =>	0x7D 0x31 (escaped)
+
+In API 2 mode, the length field does not include any escape character in the frame and the checksum is calculated with non-escaped data.
+
+All bytes except for the start delimiter must be escaped if needed.
+
 ## Librairies used in this project
 
 * ATTinySerialOut
