@@ -87,7 +87,12 @@ See [Get your Power Profiler Kit II up and running](https://www.youtube.com/watc
 
 ## Configuring XBee S1 with XCTU v6.5.13
 
-I am using old XBee S1
+I am using old XBee S1.
+
+At the begining of the project I was using the transparent mode (AT).
+
+But I changed to API Mode as it offers more options (like the RSSI)
+
 
 ### XBee firmware update
 
@@ -106,7 +111,7 @@ To make the Xbee talks to each other just config them with the same Channel and 
 
 ![](images/xbee_address_settings.jpg)
 
-### Test XBee communication
+### Test XBee communication (deprecated as it shows transparent mode)
 
 You can use XCTU to test that a mesage is correcly sent.
 
@@ -147,7 +152,7 @@ PIN 9 DOWN : Xbee awake
 
 Don't forget to set Xbee serial speed communication to 38400 bauds as the ATtinySerialOut library use this speed.
 
-### Using the API Mode
+### New way of communicating : Using the API Mode
 
 I was using Transparent Mode before (AT) but there is another mode called API Mode that offers more options and controls
 
@@ -173,6 +178,24 @@ See : <https://stackoverflow.com/questions/55861574/difference-between-api-1-and
 In API 2 mode, the length field does not include any escape character in the frame and the checksum is calculated with non-escaped data.
 
 All bytes except for the start delimiter must be escaped if needed.
+
+* End Device XBee configuration
+
+Here is what I changed in the XBee configuration with XCTU
+
+CH - Channel = C
+ID - PAN ID = 666
+SM - Sleep mode = Pin Hibernate [1]
+BD - Interface Data Rate = 38400 [5]
+AP - API Enable = API Enabled w/PPP [2]
+
+* Coordinator XBee configuration
+
+CH - Channel = C
+ID - PAN ID = 666
+CE - Coordinator Enable = Coordinator [1]
+BD - Interface Data Rate = 38400 [5]
+AP - API Enable = API Enabled w/PPP [2]
 
 ## Librairies used in this project
 

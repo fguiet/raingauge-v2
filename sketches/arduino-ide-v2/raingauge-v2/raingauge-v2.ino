@@ -57,6 +57,9 @@ const byte PHYSICAL_PIN_LINK_TO_INTERRUPT_PIN = PINB2;  //Physical PIN 6 - PIN_P
 const byte BATTERY_READING = 5;
 volatile bool isTippingOccured = false;
 
+//Tip counter
+int tip_cpt = 0;
+
 void setup() {
   // Must be called once if pin is not set to output otherwise
   initTXPin();
@@ -74,6 +77,10 @@ void loop() {
   //Reinit variable
   isTippingOccured = false;
 
+  //Reset tip_counter every 32 000 tips
+  //This value can be used to control whether all tips are received
+  if (tip_cpt==32000) tip_cpt=0;
+  
   //Attach interrupt
   attachInterrupt(INTERRUPT_NUMBER, fakeFunction, LOW);
 
@@ -87,6 +94,9 @@ void loop() {
   detachInterrupt(INTERRUPT_NUMBER);
 
   if (eightSecondsPassedCounter >= ONE_HOUR || isTippingOccured) {
+    //Increase tip counter
+    tip_cpt++;      
+
     advertiseTipOccured();
 
     //Reset counter
@@ -299,7 +309,7 @@ void advertiseTipOccured() {
     tippingOccured = "true";
 
   //Send message  
-  String message = "{\"sensorid\":\""+SENSOR_ID+"\",\"tip\":\""+tippingOccured+"\",\"battery\":\""+ String(battery_voltage,2)+"\"}";
+  String message = "{\"id\":\""+SENSOR_ID+"\",\"fw\":\""+FIRMWARE_VERSION+"\",\"tip\":\""+tippingOccured+"\",\"bat\":\""+ String(battery_voltage,2)+"\",\"cpt\":"+String(tip_cpt)+"}";
   //String message = "frederic";
 
   //Send ZigBee message using API Mode 2 
