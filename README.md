@@ -2,7 +2,9 @@
 
 ## The final project
 
+![](images/everything-assembled.png)
 
+![](images/everything-printed.png)
 
 ## PCB representation
 
