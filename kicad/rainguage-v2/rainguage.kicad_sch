@@ -2473,7 +2473,7 @@
     (property "Reference" "R3" (at 182.88 113.03 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "100Ohm" (at 182.88 115.57 90)
+    (property "Value" "100 Ohm" (at 182.88 115.57 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 182.88 121.158 90)

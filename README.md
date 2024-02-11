@@ -1,5 +1,9 @@
 # Raingauge v2
 
+## PCB representation
+
+![](images/final_pcb.png)
+
 ## 3D representation
 
 ![](images/freecad-raingauge-3d.png)
@@ -77,9 +81,11 @@ Then, power the circuit by an external alimentation at 3.3v (no need to power th
 
 ## Power consumption
 
-Using the PPK II (Nordic Power Profiler Kit II), the device consume about 10uA when sleeping and 55mA when sending data.
+Using the PPK II (Nordic Power Profiler Kit II), the device consume about 13uA when sleeping and 60mA when sending data.
 
-![](images/power-consumption.png)
+![](images/power-consumption-deep-sleep.png)
+
+![](images/power-consumption-sending.png)
 
 VOUT of the PPK II should be connected to VIN of the device and GND to GND.
 
