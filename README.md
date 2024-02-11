@@ -1,5 +1,9 @@
 # Raingauge v2
 
+## The final project
+
+
+
 ## PCB representation
 
 ![](images/final_pcb.png)
@@ -202,6 +206,8 @@ ID - PAN ID = 666
 CE - Coordinator Enable = Coordinator [1]
 BD - Interface Data Rate = 38400 [5]
 AP - API Enable = API Enabled w/PPP [2]
+RR - XBee Retries = 3 (because the RSSI was not good I tried this setting)
+
 
 ## Librairies used in this project
 
