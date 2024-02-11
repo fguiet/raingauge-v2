@@ -6,6 +6,8 @@
 
 ![](images/everything-printed.png)
 
+This project is available on Thingiverse : <https://www.thingiverse.com/thing:6480016>
+
 ## PCB representation
 
 ![](images/final_pcb.png)
