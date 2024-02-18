@@ -55,10 +55,12 @@ const byte WAKE_XBEE_PIN = PINB0;                       //ie PIN_PB0 - Physical 
 const byte INTERRUPT_NUMBER = 0;                        // This is the interrupt number linked to PB2 (See schematic) - INT0
 const byte PHYSICAL_PIN_LINK_TO_INTERRUPT_PIN = PINB2;  //Physical PIN 6 - PIN_PB1 link to PCINT1 (see schematic)
 const byte BATTERY_READING = 5;
+const uint8_t XBEE_COORDINATOR_ADDRESS[] = {0x00,0x13,0xA2,0x00,0x40,0xB4,0xC3,0x6C};
 volatile bool isTippingOccured = false;
 
 //Tip counter
 int tip_cpt = 0;
+int tip_cpt_rain = 0;
 
 void setup() {
   // Must be called once if pin is not set to output otherwise
@@ -80,6 +82,7 @@ void loop() {
   //Reset tip_counter every 32 000 tips
   //This value can be used to control whether all tips are received
   if (tip_cpt==32000) tip_cpt=0;
+  if (tip_cpt_rain==32000) tip_cpt_rain=0;
   
   //Attach interrupt
   attachInterrupt(INTERRUPT_NUMBER, fakeFunction, LOW);
@@ -94,8 +97,12 @@ void loop() {
   detachInterrupt(INTERRUPT_NUMBER);
 
   if (eightSecondsPassedCounter >= ONE_HOUR || isTippingOccured) {
-    //Increase tip counter
-    tip_cpt++;      
+
+    if (isTippingOccured)
+      //Increase tip counter
+      tip_cpt_rain++;      
+    else
+      tip_cpt++;
 
     advertiseTipOccured();
 
@@ -159,15 +166,20 @@ void createAndSendZigBeeAPIFrame(String message) {
   frame[4] = 0x42; // Frame ID 0x42 why not ;-)
   //
   // Desination address : here my coordinator 
-  frame[5] = 0x00;
-  frame[6] = 0x13;
+  for (int i=0; i <= sizeof(XBEE_COORDINATOR_ADDRESS) -1; i++) {
+    frame[5+i] = XBEE_COORDINATOR_ADDRESS[i];
+  }
+
+  /*frame[5] = 0x00; 0
+  frame[6] = 0x13; 
   frame[7] = 0xA2;
   frame[8] = 0x00;
   frame[9] = 0x40;
-  frame[10] = 0xB2;
-  frame[11] = 0x45;
-  frame[12] = 0xBF;
-  //
+  frame[10] = 0xB4;
+  frame[11] = 0xC3;
+  frame[12] = 0x6C;*/
+  
+    //
   frame[13] = 0x00; // Options
   //
   // DATA      
@@ -295,7 +307,7 @@ void createAndSendZigBeeAPIFrame(String message) {
 
 void advertiseTipOccured() {
 
-  String tippingOccured = "false";
+  String tippingOccured = "f";
 
   //Wakeup XBee
   digitalWrite(WAKE_XBEE_PIN, LOW);
@@ -306,11 +318,12 @@ void advertiseTipOccured() {
   float battery_voltage = averageVoltage();
 
   if (isTippingOccured)
-    tippingOccured = "true";
+    tippingOccured = "t";
 
   //Send message  
-  String message = "{\"id\":\""+SENSOR_ID+"\",\"fw\":\""+FIRMWARE_VERSION+"\",\"tip\":\""+tippingOccured+"\",\"bat\":\""+ String(battery_voltage,2)+"\",\"cpt\":"+String(tip_cpt)+"}";
+  //String message = "{\"id\":\""+SENSOR_ID+"\",\"fw\":\""+FIRMWARE_VERSION+"\",\"tip\":\""+tippingOccured+"\",\"bat\":\""+ String(battery_voltage,2)+"\",\"cpt_rain\":"+ String(tip_cpt_rain)+",\"cpt\":"+String(tip_cpt)+"}";
   //String message = "frederic";
+  String message = "{\"id\":\""+SENSOR_ID+"\",\"fw\":\""+FIRMWARE_VERSION+"\",\"t\":\""+tippingOccured+"\",\"b\":\""+ String(battery_voltage,2)+"\",\"c1\":"+String(tip_cpt)+",\"c2\":"+String(tip_cpt_rain)+"}";
 
   //Send ZigBee message using API Mode 2 
   createAndSendZigBeeAPIFrame(message);
